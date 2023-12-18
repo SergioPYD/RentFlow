@@ -17,8 +17,8 @@ export default function Home() {
    
 
   return (
-    <div>
-        Bienvenido a tu perfil {roleDetect} {isUserActive} {activeUserId}
+    <div className="mt-10">
+        Bienvenido a tu perfil {roleDetect} {activeUserId}
     </div>
   )
 }
