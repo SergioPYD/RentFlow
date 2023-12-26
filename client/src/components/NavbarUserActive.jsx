@@ -11,59 +11,67 @@ import {
   NavbarMenuItem,
   Button,
 } from "@nextui-org/react";
-import Login from "../components/Login";
 
-export default function NavbarPrimary() {
+
+export default function NavbarUserActive() {
   const navigate = useNavigate();
-  const { isUserActive } = useContext(AuthContext);
-
+  const { isUserActive, roleDetect, verifyToken } = useContext(AuthContext);
+  
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
   const checkActive = (info) => {
     if (info.isActive) {
       return "navLinkHome";
     }
   };
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    verifyToken();
+    navigate("/");
+  };
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen} isMenuOpen={isMenuOpen} >
+    <Navbar onMenuOpenChange={setIsMenuOpen} isMenuOpen={isMenuOpen}>
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           className="sm:hidden"
         />
         <NavbarBrand>
+          <NavLink to="/home" >
+
           <p className="font-bold text-inherit">RENTFLOW</p>
+
+          </NavLink>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
           
-          <NavLink to="/inquilinos" className={checkActive} end={true}>
-            INQUILINOS
+          <NavLink to= {roleDetect === "Inquilino" ? "/piso" : "/propietario"} className={checkActive} end={true}>
+            {roleDetect === "Inquilino" ? "TU ALQUILER" : "TUS PROPIEDADES"}
           </NavLink>
         </NavbarItem>
         <NavbarItem>
-          <NavLink to="/" className={checkActive} aria-current="page">
+          <NavLink to="/home" className={checkActive} aria-current="page">
             HOME
           </NavLink>
         </NavbarItem>
         <NavbarItem>
-          <NavLink to="/propietarios" className={checkActive} end={true}>
-            PROPIETARIOS
+          <NavLink to="/perfil" className={checkActive} end={true}>
+            TU PERFIL
           </NavLink>
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
-          <Login />
-        </NavbarItem>
-        <NavbarItem className=" ml-4">
-          <Button color="primary" end={true} variant="flat">
-            <NavLink to="/signup">Registrate</NavLink>
+        <Button onClick={handleLogout} key="logout" color="danger">
+            <p>Cerrar Sesion</p>
           </Button>
         </NavbarItem>
+        
       </NavbarContent>
       <NavbarMenu>
         <NavbarMenuItem>
@@ -85,13 +93,14 @@ export default function NavbarPrimary() {
             onClick={(e) => {
               e.preventDefault();
               setIsMenuOpen(false);
-              navigate("/inquilinos");
+              {roleDetect === "Inquilino" ? navigate("/inquilinos") : navigate("/propietario")}
+              ;
             }}
             size="lg"
             
             end={true}
           >
-            INQUILINOS
+             {roleDetect === "Inquilino" ? "TU ALQUILER" : "TUS PROPIEDADES"}
           </NavLink>
         </NavbarMenuItem>
         <NavbarMenuItem>
@@ -99,20 +108,26 @@ export default function NavbarPrimary() {
             onClick={(e) => {
               e.preventDefault();
               setIsMenuOpen(false);
-              navigate("/propietarios");
+              navigate("/perfil");
             }}
             size="lg"
             
             end={true}
           >
-            PROPIETARIOS
+            TU PERFIL
           </NavLink>
+
         </NavbarMenuItem>
         <NavbarMenuItem>
-          <div className="buttonlogin">
-
-          <Login />
-          </div>
+          <NavLink
+            onClick={handleLogout}
+            size="lg"
+            style={{color:"red"}}
+            end={true}
+          >
+            Cerrar sesión
+          </NavLink>
+          
         </NavbarMenuItem>
       </NavbarMenu>
     </Navbar>

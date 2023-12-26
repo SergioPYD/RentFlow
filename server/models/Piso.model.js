@@ -28,7 +28,7 @@ const pisoSchema = new Schema({
   propietario: {
     type: Schema.Types.ObjectId,
     ref: "User",
-    unique: true,
+    
   },
   inquilino: [
     {

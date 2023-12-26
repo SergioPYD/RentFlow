@@ -1,15 +1,35 @@
+.body {
+  text-align: center;
+  
+  height: 100vh;
+}
 
+@media only screen and (min-width: 1480px) {
+  .body {
+    margin: 0 400px;
+  }
+}
+
+.buttonlogin button {
+  width: 120px;
+  text-transform: uppercase;
+  padding-right: 50px;
+}
+
+@media only screen and (max-width: 780px) {
+  .body {
+    margin: 0 5px;
+  }
+}
 
 .navLinkHome {
   color: #bda857;
   text-decoration: overline;
   font-weight: bold;
-  
 }
 
 .navLinkHome :hover {
   text-decoration: overline;
   font-weight: bold;
   color: #85d7f7;
-  ;
 }
