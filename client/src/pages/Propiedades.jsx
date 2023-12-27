@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/auth.context";
 import service from "../services/service.config";
-import CreaYEditaProp from "../components/Propiedades/CreaYEditaProp";
+import Crear from "../components/Propiedades/Crear";
 export default function Propiedades() {
   const navigate = useNavigate();
   const { isUserActive, roleDetect, activeUserId } = useContext(AuthContext);
@@ -19,7 +19,7 @@ export default function Propiedades() {
   const getData = async () => {
     try {
       const response = await service.get(`/piso/verTodos`);
-      console.log(response.data);
+     
       response.data;
       setPropiedades(response.data);
     } catch (error) {
@@ -33,7 +33,7 @@ export default function Propiedades() {
 
   return (
     <div className="mt-10">
-      <CreaYEditaProp getData={getData} />
+      <Crear getData={getData} />
       {propiedades.map((cadaPiso, i) => {
         const { _id, direccion, renta, clave } = cadaPiso;
         return (

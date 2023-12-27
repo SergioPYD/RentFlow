@@ -13,7 +13,7 @@ import {
 import { AuthContext } from "../../context/auth.context";
 import service from "../../services/service.config";
 
-export default function CreaYEditaProp(props) {
+export default function Crear(props) {
   const { activeUserId } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -34,13 +34,13 @@ export default function CreaYEditaProp(props) {
         clave,
         propietario: activeUserId,
       });
-      console.log("creado correctamente");
+     ;
       
     } catch (error) {
       if (error.response && error.response.status === 400) {
         setErrorMessage(error.response.data.errorMessage);
       } else {
-        console.log(error);
+        ;
         navigate("/error");
       }
     }

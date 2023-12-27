@@ -50,7 +50,7 @@ export default function NavbarUserActive() {
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
           
-          <NavLink to= {roleDetect === "Inquilino" ? "/piso" : "/propietario"} className={checkActive} end={true}>
+          <NavLink to= {roleDetect === "Inquilino" ? "/piso" : "/propiedades"} className={checkActive} end={true}>
             {roleDetect === "Inquilino" ? "TU ALQUILER" : "TUS PROPIEDADES"}
           </NavLink>
         </NavbarItem>
@@ -93,7 +93,7 @@ export default function NavbarUserActive() {
             onClick={(e) => {
               e.preventDefault();
               setIsMenuOpen(false);
-              {roleDetect === "Inquilino" ? navigate("/inquilinos") : navigate("/propietario")}
+              {roleDetect === "Inquilino" ? navigate("/inquilinos") : navigate("/propiedades")}
               ;
             }}
             size="lg"

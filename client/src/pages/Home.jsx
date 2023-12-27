@@ -3,7 +3,7 @@ import { AuthContext } from "../context/auth.context";
 import { useContext, useEffect } from "react";
 import Inquilino from "../components/Home/Inquilino";
 import Propietario from "../components/Home/Propietario";
-import service from "../services/service.config";
+
 
 export default function Home() {
   const navigate = useNavigate();

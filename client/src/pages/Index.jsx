@@ -16,7 +16,7 @@ export default function Index() {
 
 
     return (
-      <div className="mt-10">REGISTRATE EN ESTA FANTÁSTICA PAGINA</div>
+      <div >REGISTRATE EN ESTA FANTÁSTICA PAGINA</div>
     )
   }
   
