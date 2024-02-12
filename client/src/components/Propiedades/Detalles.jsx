@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState,useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import service from "../../services/service.config";
 import { AuthContext } from "../../context/auth.context";
 import {
@@ -18,12 +18,11 @@ import Editar from "./Editar";
 export default function Detalles() {
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
-    const { isUserActive, roleDetect } = useContext(AuthContext);
+  const { isUserActive, roleDetect } = useContext(AuthContext);
   const params = useParams();
   const navigate = useNavigate();
   const [piso, setPiso] = useState();
 
- 
   useEffect(() => {
     if (isUserActive === false || roleDetect === "Inquilino") {
       navigate("/");
@@ -32,11 +31,9 @@ export default function Detalles() {
     getData();
   }, []);
 
-
   const getData = async () => {
     try {
       const response = await service.get(`/piso/${params.idPiso}/details`);
-    ;
       setPiso(response.data);
     } catch (error) {
       console.log(error);
@@ -65,12 +62,17 @@ export default function Detalles() {
     }
 
     try {
-       await service.post(
-        `/piso/${params.idPiso}/edit-img`,
-        uploadData
-      );
+      await service.post(`/piso/${params.idPiso}/edit-img`, uploadData);
 
       getData();
+    } catch (error) {
+      navigate("/error");
+    }
+  };
+
+  const handleFotoDelete = async (index) => {
+    try {
+      await service.delete(`/piso/${params.idPiso}/delete-img`, { data: { index } });      getData();
     } catch (error) {
       navigate("/error");
     }
@@ -86,7 +88,13 @@ export default function Detalles() {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4">
         {fotos.map((cadaFoto, i) => {
-          return <Image isBlurred key={i} src={cadaFoto} alt="Foto" />;
+          return (
+            <div>
+              {" "}
+              <Image isBlurred key={i} src={cadaFoto} alt="Foto" />
+              <button onClick={() => handleFotoDelete(i)}>X</button>
+            </div>
+          );
         })}
         <label htmlFor="fileUpload" className="file-upload-label">
           <span>AÑADIR FOTOS</span>
@@ -125,7 +133,7 @@ export default function Detalles() {
               className="text-danger"
               color="danger"
               onClick={handleDelete}
-              description="¿Estás eguro, la acción no es reversible?"
+              description="¿Estás segur@? La acción no es reversible"
               startContent={
                 <DeleteDocumentIcon
                   className={cn(iconClasses, "text-danger")}
