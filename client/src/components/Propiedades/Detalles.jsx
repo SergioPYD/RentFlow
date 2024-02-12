@@ -133,7 +133,7 @@ export default function Detalles() {
               className="text-danger"
               color="danger"
               onClick={handleDelete}
-              description="¿Estás segur@? La acción no es reversible"
+              description="¿Estás segur@? La acción no es reversible."
               startContent={
                 <DeleteDocumentIcon
                   className={cn(iconClasses, "text-danger")}
