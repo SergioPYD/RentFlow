@@ -86,16 +86,18 @@ export default function Detalles() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-4">
-        {fotos.map((cadaFoto, i) => {
-          return (
-            <div>
-              {" "}
-              <Image isBlurred key={i} src={cadaFoto} alt="Foto" />
-              <button onClick={() => handleFotoDelete(i)}>X</button>
-            </div>
-          );
-        })}
+      <div className="flex justify-center gap-4">
+      {fotos.map((cadaFoto, i) => (
+        <div key={i} className="relative inline-block">
+          <button
+            onClick={() => handleFotoDelete(i)}
+            className="absolute top-0 left-0 p-2 bg-red-500 text-white"
+          >
+            X
+          </button>
+          <img src={cadaFoto} alt="Foto" width={300} height={200} />
+        </div>
+      ))}
         <label htmlFor="fileUpload" className="file-upload-label">
           <span>AÑADIR FOTOS</span>
           <input
@@ -109,7 +111,7 @@ export default function Detalles() {
       </div>
       <div>
         <h1>Detalles del Inmueble</h1>
-        <h2>Direccion: {direccion}</h2>
+        <h2>Dirección: {direccion}</h2>
         <h3>Renta: {renta}</h3>
         <h4>Clave: {clave}</h4>
         {descripcion ? <p>descripcion: {descripcion}</p> : null}

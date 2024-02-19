@@ -35,6 +35,12 @@ export default function Crear(props) {
         propietario: activeUserId,
       });
      ;
+     onOpenChange(false)
+     setDireccion("")
+     setRenta("")
+     setClave("")
+     setErrorMessage("")
+     props.getData()
       
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -87,7 +93,7 @@ export default function Crear(props) {
                   variant="bordered"
                   onChange={(e) => setClave(e.target.value)}
                 />
-                {errorMessage}
+               {errorMessage && <p style={{color:"red"}}>{errorMessage}</p>} 
               </ModalBody>
               <ModalFooter>
                 <div></div>
@@ -99,8 +105,8 @@ export default function Crear(props) {
                   color="primary"
                   onClick={(e) => {
                     crearPropiedad(e);
-                    onClose();
-                    props.getData()
+                  
+                    
                   }}
                 >
                   Crear
