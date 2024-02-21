@@ -17,7 +17,7 @@ export default function Editar(props) {
   const [descripcion, setDescripcion] = useState("");
   const [habitaciones, setHabitaciones] = useState();
   const [metros, setMetros] = useState();
-  const [clave, setClave] = useState("");
+  const [errorMessage, setErrorMessage] = useState("")
 
   const editarPiso = async (e) => {
     try {
@@ -27,8 +27,14 @@ export default function Editar(props) {
         descripcion,
         habitaciones,
         metros,
-        clave,
+        
       });
+      setDireccion("")
+      setRenta()
+      setDescripcion("")
+      setHabitaciones("")
+      setMetros()
+
     } catch (error) {
       if (error.response && error.response.status === 400) {
         setErrorMessage(error.response.data.errorMessage);
@@ -40,15 +46,15 @@ export default function Editar(props) {
   };
 
   return (
-    <div className=" max-w-3xl">
+    <div>
       <Accordion variant="shadow">
-        <AccordionItem key="1" aria-label="Accordion 1" title="Edita el Piso">
+        <AccordionItem key="1" aria-label="Accordion 1" title="Edita el Piso" >
           <form action="post">
             <div className="flex gap-4">
               <div className="w-full flex-col flex gap-4">
                 <Input
                   type="text"
-                  label="Dirección"
+                  label="* Dirección"
                   placeholder={props.piso.direccion}
                   value={direccion}
                   onChange={(e) => {
@@ -57,37 +63,17 @@ export default function Editar(props) {
                 />
                 <Input
                   type="number"
-                  label="Renta Mensual"
+                  label="* Renta Mensual"
                   placeholder={`${props.piso.renta}€`}
                   value={renta}
                   onChange={(e) => {
                     setRenta(e.target.value);
                   }}
                 />
-                <Input
-                  type="text"
-                  label="Clave"
-                  placeholder={props.piso.clave}
-                  value={clave}
-                  onChange={(e) => {
-                    setClave(e.target.value);
-                  }}
-                />
-              </div>
-              <div className="w-full flex-col flex gap-2">
-                <Textarea
-                  type="text"
-                  label="Descrición"
-                  placeholder="Añade una descripción"
-                  value={descripcion}
-                  onChange={(e) => {
-                    setDescripcion(e.target.value);
-                  }}
-                />
-                <div className="flex">
+                 <div className="flex gap-2">
                   <Input
                     type="number"
-                    label="Habitaciones"
+                    label="* Habitaciones"
                     placeholder="Nº de habitaciones"
                     value={habitaciones}
                     onChange={(e) => {
@@ -97,7 +83,7 @@ export default function Editar(props) {
 
                   <Input
                     type="number"
-                    label="M²"
+                    label="* M²"
                     placeholder="Metros cuadrados"
                     value={metros}
                     onChange={(e) => {
@@ -105,6 +91,18 @@ export default function Editar(props) {
                     }}
                   />
                 </div>
+              </div>
+              <div className="w-full flex-col flex justify-between gap-2">
+                <Textarea
+                  type="text"
+                  label="Descrición"
+                  placeholder="Añade una descripción"
+                  value={descripcion}
+                  onChange={(e) => {
+                    setDescripcion(e.target.value);
+                  }}
+                />
+               {errorMessage && <p style={{color:"red"}}>*{errorMessage}</p>}
                 <Button
                   onClick={(e) => {
                     editarPiso(e);

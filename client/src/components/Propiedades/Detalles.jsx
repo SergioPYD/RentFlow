@@ -2,9 +2,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import service from "../../services/service.config";
 import { AuthContext } from "../../context/auth.context";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+
 import {
   Spinner,
-  Image,
+  Snippet,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
@@ -14,6 +16,7 @@ import {
 } from "@nextui-org/react";
 import { DeleteDocumentIcon } from "../icons/DeleteDocumentIcon";
 import Editar from "./Editar";
+import { Carousel } from "react-responsive-carousel";
 
 export default function Detalles() {
   const iconClasses =
@@ -72,7 +75,10 @@ export default function Detalles() {
 
   const handleFotoDelete = async (index) => {
     try {
-      await service.delete(`/piso/${params.idPiso}/delete-img`, { data: { index } });      getData();
+      await service.delete(`/piso/${params.idPiso}/delete-img`, {
+        data: { index },
+      });
+      getData();
     } catch (error) {
       navigate("/error");
     }
@@ -86,18 +92,27 @@ export default function Detalles() {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex justify-center gap-4">
-      {fotos.map((cadaFoto, i) => (
-        <div key={i} className="relative inline-block">
-          <button
-            onClick={() => handleFotoDelete(i)}
-            className="absolute top-0 left-0 p-2 bg-red-500 text-white"
-          >
-            X
-          </button>
-          <img src={cadaFoto} alt="Foto" width={300} height={200} />
+      <div className="flex flex-col flex-wrap justify-center items-center gap-4">
+        <div>
+          <Carousel style>
+            {fotos.map((cadaFoto, i) => (
+              <div key={i} className="relative inline-block">
+                <img
+                  src={cadaFoto}
+                  alt="Foto"
+                  style={{ width: 600, objectFit: "cover" }}
+                />
+                <button
+                  onClick={() => handleFotoDelete(i)}
+                  className="absolute top-0 left-8 p-2 bg-red-500 text-white"
+                >
+                  X
+                </button>
+              </div>
+            ))}
+          </Carousel>
         </div>
-      ))}
+
         <label htmlFor="fileUpload" className="file-upload-label">
           <span>AÑADIR FOTOS</span>
           <input
@@ -111,41 +126,65 @@ export default function Detalles() {
       </div>
       <div>
         <h1>Detalles del Inmueble</h1>
-        <h2>Dirección: {direccion}</h2>
-        <h3>Renta: {renta}</h3>
-        <h4>Clave: {clave}</h4>
-        {descripcion ? <p>descripcion: {descripcion}</p> : null}
-        {metros ? <p>Metros: {metros}</p> : null}
-        {habitaciones ? <p>Habitaciones: {habitaciones}</p> : null}
-      </div>
-      <div>
-        <Editar piso={piso} idPiso={params.idPiso} getData={getData} />
-        <Dropdown>
-          <DropdownTrigger>
-            <Button color="danger" variant="bordered">
-              Borrar Piso
-            </Button>
-          </DropdownTrigger>
-          <DropdownMenu
-            variant="faded"
-            aria-label="Dropdown menu with description"
+        <h2>
+          <b>Dirección: </b> {direccion}
+        </h2>
+        <h3>
+          <b>Renta:</b> {renta}
+        </h3>
+        <h4></h4>
+        {descripcion ? <p><b>Descripción:</b> {descripcion}</p> : null}
+        {metros ? <p><b>Metros²</b> {metros}</p> : null}
+        {habitaciones ? <p><b>Nº Habitaciones</b> {habitaciones}</p> : null}
+        <hr />
+        <p>Código para el inquilino</p>
+        <Snippet
+          tooltipProps={{
+            color: "secondary",
+            content: "Copia el código para el inquilino",
+          }}
+          symbol="🏡"
+          color="success"
+          size="sm"
+          variant="flat"
           >
-            <DropdownItem
-              key="delete"
-              className="text-danger"
-              color="danger"
-              onClick={handleDelete}
-              description="¿Estás segur@? La acción no es reversible."
-              startContent={
-                <DeleteDocumentIcon
-                  className={cn(iconClasses, "text-danger")}
-                />
-              }
+          {clave}
+        </Snippet>
+      </div>
+      <hr />
+      <div className="flex">
+        <div className="flex-1 pr-4">
+          
+          <Editar piso={piso} idPiso={params.idPiso} getData={getData} />
+        </div>
+        <div className="flex-none w-1/4">
+          <Dropdown>
+            <DropdownTrigger>
+              <Button color="danger" variant="bordered" >
+                Borrar Piso
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              variant="faded"
+              aria-label="Dropdown menu with description"
             >
-              Borrar Piso Permanentemente
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+              <DropdownItem
+                key="delete"
+                className="text-danger"
+                color="danger"
+                onClick={handleDelete}
+                description="¿Estás segur@? La acción no es reversible."
+                startContent={
+                  <DeleteDocumentIcon
+                    className={cn(iconClasses, "text-danger")}
+                  />
+                }
+              >
+                Borrar Piso Permanentemente
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
       </div>
     </div>
   );

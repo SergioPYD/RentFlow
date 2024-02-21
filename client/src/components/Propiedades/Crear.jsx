@@ -86,13 +86,7 @@ export default function Crear(props) {
                   variant="bordered"
                   onChange={(e) => setRenta(e.target.value)}
                 />
-                <Input
-                  name="clave"
-                  label="Clave"
-                  placeholder="Clave para que los inquilinos se unan al piso"
-                  variant="bordered"
-                  onChange={(e) => setClave(e.target.value)}
-                />
+                
                {errorMessage && <p style={{color:"red"}}>{errorMessage}</p>} 
               </ModalBody>
               <ModalFooter>

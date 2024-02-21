@@ -45,41 +45,33 @@ export default function Propiedades() {
     <div>
       <Crear getData={getData} />
       <div className="flex flex-wrap justify-center gap-3 mt-20">
-      {propiedades.map((cadaPiso, i) => {
-        const { _id, direccion, renta, clave, fotos } = cadaPiso;
-        return (
-          <div key={_id} className="">
-           
-           
-            <NavLink to={`/propiedades/${_id}`}>
-              <Card className="">
-                <CardHeader >
-                  <Image
-                    alt="nextui logo"
-                    
-                    radius="sm"
-                    src={fotos[0]}
-                    
-                    fallbackSrc="https://via.placeholder.com/300x200"
-                    className="w-80 h-40 object-cover rounded-sm"
-                  />
-                  
-                </CardHeader>
-                <Divider />
-                <CardBody>
-                  <p>Dirección: {direccion}</p>
-                  <p>Renta: {renta}€</p>
-                  <p>Clave para compartir al inquilino: {clave}</p>
-                </CardBody>
-                <Divider />
-                
-              </Card>
-            </NavLink>
-          </div>
-        );
-      })}
+        {propiedades.map((cadaPiso, i) => {
+          const { _id, direccion, renta, fotos } = cadaPiso;
+          return (
+            <div key={_id}>
+              <NavLink to={`/propiedades/${_id}`}>
+                <Card>
+                  <CardHeader>
+                    <Image
+                      alt="nextui logo"
+                      radius="sm"
+                      src={fotos[0]}
+                      fallbackSrc="https://via.placeholder.com/300x200"
+                      className="w-80 h-40 object-cover rounded-sm"
+                    />
+                  </CardHeader>
+                  <Divider />
+                  <CardBody>
+                    <p>Dirección: {direccion}</p>
+                    <p>Renta: {renta}€</p>
+                  </CardBody>
+                  <Divider />
+                </Card>
+              </NavLink>
+            </div>
+          );
+        })}
+      </div>
     </div>
-    </div>
-    
   );
 }
