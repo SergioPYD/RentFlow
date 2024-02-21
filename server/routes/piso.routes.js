@@ -1,5 +1,5 @@
 const router = require("express").Router();
-
+const ShortUniqueId = require('short-unique-id')
 const isAuthenticated = require("../middlewares/isAuthenticated");
 const uploader = require("../middlewares/cloudinary.config");
 const cloudinary = require("cloudinary").v2;
@@ -31,20 +31,22 @@ router.get("/verTodos", isAuthenticated, async (req, res, next) => {
 //POST: Aqui creo un nuevo piso
 
 router.post("/add", isAuthenticated, async (req, res, next) => {
-  const { direccion, renta, clave, propietario } = req.body;
+  const { direccion, renta, propietario } = req.body;
 
-  if (!direccion || !renta || !clave || !propietario) {
+  if (!direccion || !renta || !propietario) {
     res
       .status(400)
       .json({ errorMessage: "Por favor, rellena todos los campos" });
     return;
   }
 
+  const uid = new ShortUniqueId({ length: 10 })
+ console.log(uid.rnd())
   try {
     await Piso.create({
       direccion,
       renta,
-      clave,
+      clave:uid.rnd(),
       propietario,
     });
 
@@ -83,13 +85,20 @@ router.delete("/:idPiso/delete", isAuthenticated, async (req, res, next) => {
 
 router.put("/:idPiso/edit", isAuthenticated, async (req, res, next) => {
   const { idPiso } = req.params;
-  const { direccion, renta, descripcion, habitaciones, metros, clave } =
+  const { direccion, renta, descripcion, habitaciones, metros} =
     req.body;
+
+    if (!direccion || !renta  || !habitaciones || !metros) {
+      res
+      .status(400)
+      .json({ errorMessage: "Por favor, rellena todos los campos que tengan *" });
+    return;
+    }
 
   try {
     await Piso.findByIdAndUpdate(
       idPiso,
-      { direccion, renta, descripcion, habitaciones, metros, clave },
+      { direccion, renta, descripcion, habitaciones, metros},
       { new: true }
     );
 
@@ -122,6 +131,7 @@ router.post("/:idPiso/edit-img", isAuthenticated, uploader, async (req, res, nex
   return res.json({ imageUrls: req.files.map(file => file.path) });
 });
 
+// Delete: Elimino fotos del piso
 
 router.delete('/:idPiso/delete-img', async (req, res) => {
   const { idPiso } = req.params;
@@ -130,6 +140,12 @@ router.delete('/:idPiso/delete-img', async (req, res) => {
   try {
    
     const piso = await Piso.findById(idPiso);
+
+    const publicId = piso.fotos[index].replace(/^.*[\\\/]/, '').split(".")[0];
+    
+  
+    await cloudinary.api.delete_resources([`RentFlow/${publicId}`], 
+    { type: 'upload', resource_type: 'image' });
 
     const updatedPiso = await Piso.findByIdAndUpdate(
       idPiso,
